@@ -18,6 +18,7 @@
 \usepackage{xcolor}
 \usepackage{listings}
 \usepackage{graphicx}
+\usepackage{parskip}
 
 \pgfplotsset{compat=1.18} 
 
@@ -27,8 +28,8 @@
 \renewcommand{\labelitemii}{\(\smallblackcircle\)}
 
 \lstset{
-  basicstyle=\ttfamily,
-  mathescape
+      basicstyle=\ttfamily,
+      mathescape
 }
 
 \section*{A2 MODELS}
@@ -38,17 +39,17 @@
 Define the TM M as follows:
 
 \begin{align*}
-   & \Sigma = \{0, 1\}                          \\
-   & S = \{ s_{start}, s_0, s_1, s_{end}\}      \\
-   & \delta (s_{start}, 0)= (s_0, 0, 1)         \\
-   & \delta (s_{start}, 1) = (s_1, 0, 1)        \\
-   & \delta (s_{start}, \beta)= (s_{end}, 0, 1) \\
-   & \delta (s_{0}, 0)= (s_0, 0, 1)             \\
-   & \delta (s_{1}, 0)= (s_0, 1, 1)             \\
-   & \delta (s_{0}, 1) = (s_1, 0, 1)            \\
-   & \delta (s_{1}, 1) = (s_1, 1, 1)            \\
-   & \delta (s_{0}, \beta)= (s_{end}, 0, 1)     \\
-   & \delta (s_{1}, \beta)= (s_{end}, 1, 1)     \\
+       & \Sigma = \{0, 1\}                          \\
+       & S = \{ s_{start}, s_0, s_1, s_{end}\}      \\
+       & \delta (s_{start}, 0)= (s_0, 0, 1)         \\
+       & \delta (s_{start}, 1) = (s_1, 0, 1)        \\
+       & \delta (s_{start}, \beta)= (s_{end}, 0, 1) \\
+       & \delta (s_{0}, 0)= (s_0, 0, 1)             \\
+       & \delta (s_{1}, 0)= (s_0, 1, 1)             \\
+       & \delta (s_{0}, 1) = (s_1, 0, 1)            \\
+       & \delta (s_{1}, 1) = (s_1, 1, 1)            \\
+       & \delta (s_{0}, \beta)= (s_{end}, 0, 1)     \\
+       & \delta (s_{1}, \beta)= (s_{end}, 1, 1)     \\
 \end{align*}
 
 \subsubsection*{Complexity}
@@ -57,52 +58,52 @@ So the runtime is $n+1=\mathcal{O} (n)$ for any $x \in \{0, 1\}^n$.
 
 \subsubsection*{Correctness}
 \begin{itemize}
-  \item First, M writes 0 in the first cell. If the original value was 1 or 0,
-        then M saves it to the state and moves right. If the original value was
-        $\beta$ then M simply halts.
-  \item By induction on $i=1,...,n-1$, after $i$ steps, first $i$ cells of
-        the worktape contain $0 x_1 x_2 ... x_{i-1}$ and the state is $s_{x_i}$.
-        In step $i+1$, M writes $x_i$ in the $x+1$ cell and saves $x+1$ in the state.
-  \item In step $n$, the machine state is $s_{x_{n-1}}$ so M writes
-        $x_{n-1}$, reads $\beta$ and halts.
+      \item First, M writes 0 in the first cell. If the original value was 1 or 0,
+            then M saves it to the state and moves right. If the original value was
+            $\beta$ then M simply halts.
+      \item By induction on $i=1,...,n-1$, after $i$ steps, first $i$ cells of
+            the worktape contain $0 x_1 x_2 ... x_{i-1}$ and the state is $s_{x_i}$.
+            In step $i+1$, M writes $x_i$ in the $x+1$ cell and saves $x+1$ in the state.
+      \item In step $n$, the machine state is $s_{x_{n-1}}$ so M writes
+            $x_{n-1}$, reads $\beta$ and halts.
 \end{itemize}
 
 \subsection*{Q2.}
 
 Define TM as follows:
 \begin{itemize}
-  \item Mark the first bit as 1'. (Assuming that there are no leading 0's)
-  \item Go all the way right
-  \item Go 1 step left
-        \begin{itemize}
-          \item If it sees 1, set to 0 and go 1 step left. Repeat this until it sees a 0.
-          \item If we see a 0, set it to 1 and halt.
-        \end{itemize}
-  \item If we reach 1' without seeing a 0
-        \begin{itemize}
-          \item Leave first bit as 1
-          \item Walk right until we see a $\beta$, write 0 and halt.
-        \end{itemize}
+      \item Mark the first bit as 1'. (Assuming that there are no leading 0's)
+      \item Go all the way right
+      \item Go 1 step left
+            \begin{itemize}
+                  \item If it sees 1, set to 0 and go 1 step left. Repeat this until it sees a 0.
+                  \item If we see a 0, set it to 1 and halt.
+            \end{itemize}
+      \item If we reach 1' without seeing a 0
+            \begin{itemize}
+                  \item Leave first bit as 1
+                  \item Walk right until we see a $\beta$, write 0 and halt.
+            \end{itemize}
 \end{itemize}
 
 \subsection*{Q3.}
 
 Define TM as follows:
 \begin{itemize}
-  \item For each unmarked bit $\ell$
-        \begin{itemize}
-          \item Mark is as seen ($\ell'$) and set state to just seen $\ell$ ($s_\ell$)
-          \item Walk right to the rightmost unmarked symbol $r$ and mark is as seen ($r'$)
-                \begin{itemize}
-                  \item If there is no such symbol, then accept and halt.
-                  \item Check that $r = \ell$
+      \item For each unmarked bit $\ell$
+            \begin{itemize}
+                  \item Mark is as seen ($\ell'$) and set state to just seen $\ell$ ($s_\ell$)
+                  \item Walk right to the rightmost unmarked symbol $r$ and mark is as seen ($r'$)
                         \begin{itemize}
-                          \item If $r \ne \ell$, reject and halt.
-                          \item If equal, continue
+                              \item If there is no such symbol, then accept and halt.
+                              \item Check that $r = \ell$
+                                    \begin{itemize}
+                                          \item If $r \ne \ell$, reject and halt.
+                                          \item If equal, continue
+                                    \end{itemize}
                         \end{itemize}
-                \end{itemize}
-        \end{itemize}
-  \item Once all bits are marked, accept and halt.
+            \end{itemize}
+      \item Once all bits are marked, accept and halt.
 \end{itemize}
 
 \subsubsection*{Complexity}
@@ -116,13 +117,13 @@ Let M be a TM with special end states $s_{accept}$ and $s_{reject}$.
 
 Define M' as follows:
 \begin{itemize}
-  \item Runs the same steps as M
-  \item Except, when M accepts or rejects, M' instead:
-        \begin{itemize}
-          \item Goes all the way right
-          \item Erases the tape, right to left
-          \item In the leftmost cell, writes 1 for accept and 0 for reject.
-        \end{itemize}
+      \item Runs the same steps as M
+      \item Except, when M accepts or rejects, M' instead:
+            \begin{itemize}
+                  \item Goes all the way right
+                  \item Erases the tape, right to left
+                  \item In the leftmost cell, writes 1 for accept and 0 for reject.
+            \end{itemize}
 \end{itemize}
 
 \subsubsection*{Complexity}
@@ -140,14 +141,14 @@ Let M' be a standard TM containing $w_1 \# w_2$ on the tape.
 Mark the first bit of $w_1$ and $w_2$ as the head with '.
 Simulate each action of M as follows:
 \begin{itemize}
-  \item Walk leftmost then right to the head on $w_1$.
-        Simulate action in $w_1$, unmarking the previous head and marking
-        the new head.
-  \item Walk right (passed the delimiter) to the head on $w_2$.
-        Simulate action on $w_2$, unmarking the previous head and marking
-        the new head.
-  \item If $w_1$ runs out of space, shift entire contents of $\# w_2$
-        to the right and pad with $\beta$.
+      \item Walk leftmost then right to the head on $w_1$.
+            Simulate action in $w_1$, unmarking the previous head and marking
+            the new head.
+      \item Walk right (passed the delimiter) to the head on $w_2$.
+            Simulate action on $w_2$, unmarking the previous head and marking
+            the new head.
+      \item If $w_1$ runs out of space, shift entire contents of $\# w_2$
+            to the right and pad with $\beta$.
 \end{itemize}
 
 \subsubsection*{Complexity}
@@ -171,17 +172,17 @@ Mark the first bit of each $w_i$, indicating the head location.
 
 Simulate M with M' as follows:
 \begin{itemize}
-  \item Walk leftmost then right to the head on $w_1$. Simulate action on $w_1$
-        and update the head location by marking the new head.
-  \item Walk right until the nearest delimiter, then walk to the head on $w_2$.
-        Simulate the action on $w_2$, and update the head location.
-  \item Walk right until the nearest delimiter, then walk to the head on $w_3$.
-        Simulate the action on $w_3$, and update the head location.
-  \item ...
-  \item Walk right until the last delimiter, then walk to the head on $w_k$.
-        Simulate the action on $w_k$, and update the head location.
-  \item Repeat this process. If any of the $w_i$ run out of space, shift the
-        entire right side contents to the right.
+      \item Walk leftmost then right to the head on $w_1$. Simulate action on $w_1$
+            and update the head location by marking the new head.
+      \item Walk right until the nearest delimiter, then walk to the head on $w_2$.
+            Simulate the action on $w_2$, and update the head location.
+      \item Walk right until the nearest delimiter, then walk to the head on $w_3$.
+            Simulate the action on $w_3$, and update the head location.
+      \item ...
+      \item Walk right until the last delimiter, then walk to the head on $w_k$.
+            Simulate the action on $w_k$, and update the head location.
+      \item Repeat this process. If any of the $w_i$ run out of space, shift the
+            entire right side contents to the right.
 \end{itemize}
 
 \subsubsection*{Complexity}
@@ -201,18 +202,18 @@ Let M be a two-way-infinite tape.
 Let M' be a one-way-infinite tape.
 Simulate M with M' as follows:
 \begin{itemize}
-  \item Mark the leftmost cell with a delimiter.
-  \item Copy the input on the right of the delimiter.
-  \item For each action of M
-        \begin{itemize}
-          \item If M moves right, M' also moves right.
-          \item If M moves left, M' also moves left.
-          \item If M' every reads the delimiter, then it shifts the entire
-                tape's content from $\# x_1 x_2 ...$ to $\# \beta x_1 x_2 ...$.
-                Then it walks right until it reaches the delimiter,
-                moves one step right and continues
-                the simulation.
-        \end{itemize}
+      \item Mark the leftmost cell with a delimiter.
+      \item Copy the input on the right of the delimiter.
+      \item For each action of M
+            \begin{itemize}
+                  \item If M moves right, M' also moves right.
+                  \item If M moves left, M' also moves left.
+                  \item If M' every reads the delimiter, then it shifts the entire
+                        tape's content from $\# x_1 x_2 ...$ to $\# \beta x_1 x_2 ...$.
+                        Then it walks right until it reaches the delimiter,
+                        moves one step right and continues
+                        the simulation.
+            \end{itemize}
 \end{itemize}
 
 \subsubsection*{Complexity}
@@ -232,18 +233,18 @@ $\lceil \log \lvert \Sigma \rvert \rceil$ bits.
 
 Define TM M' as follows:
 \begin{itemize}
-  \item For each sequence of bits representing a symbol in $\Sigma$, define
-        states for each prefix. i.e. if the encoding of a symbol is 1010, then
-        create states $s_{1}, s_{10}, s_{101}, s_{1010}$ for just saw this sequence.
-        Once the entire symbol sequence is recognized, it can write the corresponding
-        bits of the output symbol from right to left (determined by the states).
-        Then, if M moves left, M' moves $\lceil \log \lvert \Sigma \rvert \rceil$
-        steps left. Or if M moves right, M' moves $\lceil \log \lvert \Sigma \rvert \rceil$
-        steps right.
-  \item For each action of M, M' performs
-        $3 \cdot \lceil \log \lvert \Sigma \rvert \rceil$
-        times as many steps, so it computes $f$ in time
-        $\mathcal{O}(3 \cdot \lceil \log \lvert \Sigma \rvert \rceil \cdot T(n)) = \mathcal{O}(T(n))$
+      \item For each sequence of bits representing a symbol in $\Sigma$, define
+            states for each prefix. i.e. if the encoding of a symbol is 1010, then
+            create states $s_{1}, s_{10}, s_{101}, s_{1010}$ for just saw this sequence.
+            Once the entire symbol sequence is recognized, it can write the corresponding
+            bits of the output symbol from right to left (determined by the states).
+            Then, if M moves left, M' moves $\lceil \log \lvert \Sigma \rvert \rceil$
+            steps left. Or if M moves right, M' moves $\lceil \log \lvert \Sigma \rvert \rceil$
+            steps right.
+      \item For each action of M, M' performs
+            $3 \cdot \lceil \log \lvert \Sigma \rvert \rceil$
+            times as many steps, so it computes $f$ in time
+            $\mathcal{O}(3 \cdot \lceil \log \lvert \Sigma \rvert \rceil \cdot T(n)) = \mathcal{O}(T(n))$
 \end{itemize}
 
 \subsubsection*{Complexity}
@@ -256,34 +257,32 @@ TODO
 
 \subsection*{Q9.}
 
-\setlength{\parskip}{10pt}{
-  Consider $L = \{x : x \text{ is a palindrome}\}$.
+Consider $L = \{x : x \text{ is a palindrome}\}$.
 
-  To decide if a string is a palindrome, the TM must look at all
-  $n$ bits if $n$ is even or $n-1$ bits if $n$ is odd
-  (middle bit can be ignored).
+To decide if a string is a palindrome, the TM must look at all
+$n$ bits if $n$ is even or $n-1$ bits if $n$ is odd
+(middle bit can be ignored).
 
-  For the sake of contradiction, suppose that $L$ can be decided in
-  $o(n)$. Then, for any input, there must be at least one bit
-  (that is not the center bit when $n$ is odd)
-  that the TM does not look at.
+For the sake of contradiction, suppose that $L$ can be decided in
+$o(n)$. Then, for any input, there must be at least one bit
+(that is not the center bit when $n$ is odd)
+that the TM does not look at.
 
-  Consider a palindrome string $x_1$.
-  There is at least one bit in $x_1$ that the TM does not look at
-  (and is not the middle bit if the string has odd length).
-  Let this bit be in position $i$.
-  Let $x_2$ be $x_1$ with the $i$th bit flipped. Thus $x_2$ is not a palindrome.
-  The TM accepts both $x_1$ and $x_2$ (since it does not look at the $i$th bit).
-  This is a contradiction.
+Consider a palindrome string $x_1$.
+There is at least one bit in $x_1$ that the TM does not look at
+(and is not the middle bit if the string has odd length).
+Let this bit be in position $i$.
+Let $x_2$ be $x_1$ with the $i$th bit flipped. Thus $x_2$ is not a palindrome.
+The TM accepts both $x_1$ and $x_2$ (since it does not look at the $i$th bit).
+This is a contradiction.
 
-  Therefore, $L$ cannot be decided in $o(n)$.
-}
+Therefore, $L$ cannot be decided in $o(n)$.
 
 \subsection*{Q10.}
 
 Consider $f(x) = 0^{2^{2^{2^{2^n}}}}$. i.e. $f$ takes any binary string of
 length $n$ as input and outputs 0 $2^{2^{2^{2^n}}}$ times. This function
-cannot be computed in time $o(2^{2^{2^{2^n}}})$ since it takes at least 
-$2^{2^{2^{2^n}}}$ writes to write $2^{2^{2^{2^n}}}$ 0's. 
+cannot be computed in time $o(2^{2^{2^{2^n}}})$ since it takes at least
+$2^{2^{2^{2^n}}}$ writes to write $2^{2^{2^{2^n}}}$ 0's.
 
 \end{document}
