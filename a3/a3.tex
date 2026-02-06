@@ -1,0 +1,289 @@
+\documentclass[letterpaper]{article}
+\usepackage[margin=2cm]{geometry}
+\usepackage[english]{babel}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[edges]{forest}
+\usepackage{tikz}
+\pagestyle{empty}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{fdsymbol}
+\usepackage{pgfplots}
+\usepackage{cancel}
+\usepackage{soul}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{parskip}
+
+\pgfplotsset{compat=1.18} 
+
+\begin{document}
+\flushleft
+\renewcommand{\labelitemiii}{\(\smallblackcircle\)}
+\renewcommand{\labelitemii}{\(\smallblackcircle\)}
+
+\lstset{
+  basicstyle=\ttfamily,
+  mathescape
+}
+
+\section*{A3 Computability and Kolmogorov Complexity}
+
+\subsection*{Q1.}
+
+\subsubsection*{($\Rightarrow$)}
+
+Let $D$ be a decider for $L$.
+Construct $D'$ as follows: given input $x$, simulate $D(x)$,
+and output the opposite.
+
+\begin{itemize}
+  \item If $x \in L \Rightarrow D(x)$ accepts $\Rightarrow D'(x)$ rejects.
+  \item If $x \notin L \Rightarrow D(x)$ rejects $\Rightarrow D'(x)$ accepts.
+\end{itemize}
+
+Therefore, $D'$ decides $\bar{L}$
+
+\subsubsection*{($\Leftarrow$)}
+
+Proof is analogous to $\Rightarrow$ case.
+
+\subsection*{Q2.}
+
+\subsubsection*{1. $L=\{\langle M\rangle: M(\langle M \rangle) = 1\}$}
+
+Note: $L$ is the language of self-accepting machines.
+
+Recall: HALT $= \{\langle M \rangle: M(\langle M \rangle) \text{ halts}\}$
+
+Assume L is decidable and that D decides it. We will construct H
+that decides HALT with D.
+
+\begin{verbatim}
+  1.  H on input <M>
+  2.    if <M> is not an encoding of a valid TM, reject
+  3.    construct M':
+  4.      simulate M(<M>)
+  5.      accept
+  6.    run D(<M'>)
+  7.      if D accepts, accept
+  8.      if D rejects, reject
+\end{verbatim}
+
+If $\langle M\rangle$ $\in$ HALT
+$\Rightarrow M'$ always accepts
+$\Rightarrow M'(\langle M' \rangle) = 1$
+$\Rightarrow D(\langle M' \rangle)$ accepts
+$\Rightarrow H$ accepts
+
+If $\langle M\rangle$ $\notin$ HALT
+$\Rightarrow M'$ loops forever
+$\Rightarrow M'(\langle M' \rangle) \ne 1$
+$\Rightarrow D(\langle M' \rangle)$ rejects
+$\Rightarrow H$ rejects
+
+Therefore, H decides HALT. But HALT is undecidable,
+so this is a contradiction. Therefore, L is undecidable.
+
+\subsubsection*{2. $L = \{\langle M \rangle , x : M(x) \text{ prints your first name}\}$}
+
+Note: L is the language of all machines that print your first name.
+
+Assume L is decidable and that D decides it. We will construct H that decides HALT using D.
+
+\begin{lstlisting}
+  1.  H on input <M>
+  2.    if <M> is not a valid encoding of a TM, reject
+  3.    construct M' st M' on x:
+  4.      simulate M(<M>)
+  5.      print your first name
+  6.    run D(<M'>,$\epsilon$):
+  7.      if D accepts, accept
+  8.      if D rejects, reject
+\end{lstlisting}
+
+If $\langle M \rangle \in$ HALT
+$\Rightarrow M'$ prints your first name
+$\Rightarrow D$ accepts
+$\Rightarrow H$ accepts
+
+If $\langle M \rangle \notin$ HALT
+$\Rightarrow M'$ does not print your first name
+$\Rightarrow D$ rejects
+$\Rightarrow H$ rejects
+
+Therefore, H decides HALT. But HALT is undecidable,
+so this is a contradiction. Therefore, L is undecidable.
+
+\subsubsection*{3. $L=\{\langle M \rangle : M (\langle M \rangle ) \text{ doesn't halt}\}$}
+
+Assume L is decidable and that D decides it.
+
+Construct H deciding HALT as follows:
+Given $\langle M \rangle$, simulate D($\langle M \rangle$), output the opposite.
+
+H clearly decides HALT, but this is a contradiction.
+Therefore, L is undecidable.
+
+\subsubsection*{4. $L=\{\langle M \rangle,x : M (x ) \text{ halts}\}$}
+
+Assume L is decidable and that D decides it.
+We will construct H deciding HALT using D.
+
+\begin{verbatim}
+  1.  H on input <M>:
+  2.  if <M> is not a valid encoding of a TM, reject 
+  3.  construct M' st M' on x:
+  4.    simulate M(x)
+  5.    accept 
+  6.  run D(<M'>,<M>)
+  7.    if D accepts, accept 
+  8.    if D rejects, reject
+\end{verbatim}
+
+If $\langle M \rangle \in$ HALT
+$\Rightarrow M(\langle M \rangle)$ halts
+$\Rightarrow $ D accepts
+$\Rightarrow$ H accepts
+
+If $\langle M \rangle \notin$ HALT
+$\Rightarrow M(\langle M \rangle)$ does not halt
+$\Rightarrow $ D rejects
+$\Rightarrow$ H rejects
+
+Therefore, H decides HALT. But HALT is undecidable,
+so this is a contradiction. Therefore, L is undecidable.
+
+\subsubsection*{5. $L = \{ \langle M, x \rangle : M(x) \text{ halts after at most } |x|^3 \text{ steps} \}$}
+
+Define D as follows:
+\begin{lstlisting}
+  1.  D on input <M,x>
+  2.    run M(x) for |x|$^3$ steps
+  3.    if M(x) halted then accept 
+  4.    if M(x) did not halt then reject
+\end{lstlisting}
+
+If $M(x)$ halts within $|x|^3$ steps, then D correctly accepts.
+Otherwise $M(x)$ correctly rejects.
+
+Therefore, L is decidable.
+
+\subsubsection*{6. $L = \{ \langle M \rangle : \text{the first bit in the description of } M \text{ is } 0 \}$}
+
+Define D as follows:
+\begin{lstlisting}
+  1.  D on input <M>
+  2.    if the first bit is 0 then accept
+  3.    else reject
+\end{lstlisting}
+
+If the first bit is a 0, D correctly accepts. If the first bit
+is not 0, D correctly rejects.
+
+Therefore, L is decidable.
+
+\subsubsection*{7. $L = \{ \langle M \rangle : \exists M' \text{ such that } L(M) \cap L(M') = \emptyset \}$}
+
+Define D as follows:
+\begin{lstlisting}
+  1.  D on input <M>
+  2.    accept
+\end{lstlisting}
+
+Choose $M'$ to be a TM that always rejects. i.e. it's language is empty.
+
+Therefore, L is decidable.
+
+\subsubsection*{8. $L = \{ \langle M \rangle : \exists x \text{ such that } M(x) = x \}$}
+
+Assume L is decidable and that D decides it.
+We will construct H deciding HALT using D.
+
+\begin{verbatim}
+  1.  H on input <M>:
+  2.  if <M> is not a valid encoding of a TM, reject 
+  3.  construct M' st M' on x:
+  4.    simulate M(<M>)
+  5.    output 1
+  6.  run D(<M'>)
+  7.    if D accepts, accept 
+  8.    if D rejects, reject
+\end{verbatim}
+
+If $\langle M \rangle \in$ HALT
+$\Rightarrow M(\langle M \rangle)$ halts
+$\Rightarrow M'(1) = 1$
+$\Rightarrow \exists x, M'(x) = x$
+$\Rightarrow $ D accepts
+$\Rightarrow$ H accepts
+
+If $\langle M \rangle \notin$ HALT
+$\Rightarrow M(\langle M \rangle)$ does not halt
+$\Rightarrow $ D rejects
+$\Rightarrow$ H rejects
+
+Therefore, H decides HALT. But HALT is undecidable,
+so this is a contradiction. Therefore, L is undecidable.
+
+\subsection*{Q3.}
+
+$L = \{ x : K(x) < |x|\}$
+
+Assume L is decidable and that D decides it.
+
+Let $M$ be a TM that:
+\begin{itemize}
+  \item gets input n
+  \item enumerates all strings with length $>$ n in order
+  \item uses D to find the first incompressible string not in L (i.e. D rejects)
+  \item prints it
+\end{itemize}
+
+Let $n$ be large enough.
+On one hand, the output of $M(n)$ has length $>n$.
+
+On the other hand, the output of $M(n)$ can be represented using
+$\log n$ bits to encode $n$ and $\mathcal{O}(1)$ bits for $|\langle M \rangle|$
+$\Rightarrow \log n + \mathcal{O}(1)$ bits.
+
+This is a contradiction. Therefore, L is undecidable.
+
+\subsection*{Q4.}
+
+Consider $x = 0^n$ where $n = 2^{2^k} \Rightarrow \log \log n = k$.
+
+Let M be a TM that takes input $k$, computes $n = 2^{2^k}$ and prints $n$ 0s
+$\Rightarrow K(x) \le \log\log n + \mathcal{O}(1)$.
+
+Similar for infinitely many $\log$s.
+
+\subsection*{Q5.}
+
+For $xy$, can represent $x$ with $\langle M_x \rangle,w_x$ (length $K(x)$) and represent
+$y$ with $\langle M_y \rangle,w_y$ (length $K(y)$).
+i.e. represent $xy$ as $\langle M_x \rangle,w_x\langle M_y \rangle,w_y$.
+
+And then to identify the boundary between the representations of
+$x$ and $y$, can append the number of bits for either section.
+The length of the $x$ section is $K(x)$. If we encode this in binary, we have
+$\log(K(x))$. May need additional mappings to delimit this
+$\Rightarrow \mathcal{O}(\log(K(x)))$.
+
+Can also identify the sections using $\log K(y)$.
+
+\subsection*{Q6.}
+
+TODO: try proof by contradiction and assume that there's a k where no
+such x exists?
+
+\subsection*{Q7.}
+
+
+
+\end{document}
