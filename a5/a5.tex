@@ -1,0 +1,221 @@
+\documentclass[letterpaper]{article}
+\usepackage[margin=2cm]{geometry}
+\usepackage[english]{babel}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[edges]{forest}
+\usepackage{tikz}
+\pagestyle{empty}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{fdsymbol}
+\usepackage{pgfplots}
+\usepackage{cancel}
+\usepackage{soul}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{parskip}
+
+\pgfplotsset{compat=1.18} 
+
+\begin{document}
+\flushleft
+\renewcommand{\labelitemiii}{\(\smallblackcircle\)}
+\renewcommand{\labelitemii}{\(\smallblackcircle\)}
+
+\lstset{
+  basicstyle=\ttfamily,
+  mathescape
+}
+
+\section*{A5 NP}
+
+\subsection*{Q1.}
+
+R is the set of decidable languages.
+
+P is the set of languages that are decidable in polynomial time.
+
+RE is the set of verifiable languages.
+
+NP is the set of languages that are verifiable in polynomial time.
+
+\subsection*{Q2.}
+
+CLIQUE:
+\begin{itemize}
+  \item Verifier $V$ takes a description of the graph $\langle G \rangle$, $k$,
+        and a clique $\langle C \rangle$.
+        Checks if the size of $\langle C \rangle$ is at least $k$.
+        This can be done in polytime.
+        For each pair $u,v$ in $\langle C \rangle$, it checks if there is
+        an edge $u,v$ in the graph. This can be done in polytime.
+  \item $R = \{ ((G,k), S) : S \text{ is a clique of $G$ with size at least $k$} \}$
+\end{itemize}
+
+SUBSET-SUM:
+\begin{itemize}
+  \item Verifier $V$ takes a list of variables $x_1,...,x_n$,
+        $t \in N$, and a subset of the variables $y_1,...,y_m$ such that
+        $m \le n$.
+        It sums up the variables in the subset and compares it to the total.
+        At most $n$ values are summed. This takes polytime.
+        Comparison also polytime.
+  \item $R = \{ ((x_1,...,x_n,t), (y_1,..., y_m)) : \Sigma_{i=1}^{m} y_i = t \text{, where each $y_i$ is some $x_j$ } \}$
+\end{itemize}
+
+
+QUAD:
+\begin{itemize}
+  \item Verifier $V$ takes a description of the quadratic polynomials and an assignment.
+        For each polynomial, it computes the value using the given assignment and checks if its 0.
+        Each polynomial has up to $n^2$ terms, and can be evaluated in polytime.
+  \item $R = \{ ((q_1,...,q_n),x): \forall i \in [n], q_i(x)=0  \}$
+\end{itemize}
+
+\subsection*{Q3.}
+
+Not in NP because the witness (i.e. $y_i$'s) is not polysized relative to
+the input $x$.
+
+Depending on the chosen $f$, witness could be anything.
+
+\subsection*{Q4.}
+
+1. $\text{NTIME}'[T] \subseteq \text{NTIME}[T]$
+
+Given $V'$ that takes a witness with length $T$.
+Construct $V$ that takes $x$ and $w$, where $|w| \le T(|x|)$.
+If $|w| < T(|x|)$, then pad and run $V'$.
+SEE TUTORIAL 6.
+
+2. $\text{NTIME}[T] \subseteq \text{NTIME}'[T'] = \text{NTIME}'[O(T)]$
+
+Given $V$ that takes a witness $w$ of length $\le T$.
+Construct $V'$ that takes a witness $w'$ of length $T'$,
+where the $w'$ contains $w$ followed by a delimiter $\#$ followed by padding.
+$V'$ chops off everything including and following the delimiter and
+calls $V$.
+
+WIP
+
+\subsection*{Q5.}
+
+NP is the set of languages that can be verified in polynomial time (deterministic).
+
+RE is the set of verifiable languages.
+
+$\Rightarrow NP \subseteq RE$
+
+NP is the set of languages that can be decided in polynomial time by a
+non-deterministic machine.
+
+R is the set of decidable languages.
+
+$\Rightarrow NP \subseteq R$
+
+\subsection*{Q6.}
+
+Let $L \in NP$. Then it has a verifier $V$ that runs in time $O(T(n))$.
+
+Construct D that decides L:
+\begin{verbatim}
+for each possible witness w st |w| <= T(n):
+  run V(x,w)
+  if V accepted then accept
+  else continue
+reject
+\end{verbatim}
+
+Total possible number of witnesses is $2^{T(n)}$.
+Each call to V is $O(T(n))$.
+Total run time is $2^{T(n)} \cdot O(T(n)) = O(2^{T(n)}) = O(2^{n^c})$.
+Therefore, L $\in$ EXP.
+
+$\Rightarrow NP \subseteq EXP$
+
+\subsection*{Q7.}
+TODO
+
+\subsection*{Q8.}
+
+\begin{enumerate}
+  \item no have to prove for every 
+  \item yes
+  \item yes 
+  \item no
+\end{enumerate}
+
+For $\ne$, prove 3. For $=$, prove 2.
+
+\subsection*{Q9.}
+TODO
+
+\subsection*{Q10.}
+TODO
+
+\subsection*{Q11.}
+TODO
+
+\subsection*{Q12.}
+TODO
+
+\subsection*{Q13.}
+TODO
+
+\subsection*{Q14.}
+TODO
+
+\subsection*{Q15.}
+TODO
+
+\subsection*{Q16.}
+TODO
+
+\subsection*{Q17.}
+TODO
+
+\subsection*{Q18.}
+TODO
+
+\subsection*{Q19.}
+TODO
+
+\subsection*{Q20.}
+TODO
+
+\subsection*{Q21.}
+TODO
+
+\subsection*{Q22.}
+TODO
+
+\subsection*{Q23.}
+TODO
+
+\subsection*{Q24.}
+TODO
+
+\subsection*{Q25.}
+TODO
+
+\subsection*{Q26.}
+TODO
+
+\subsection*{Q27.}
+TODO
+
+\subsection*{Q28.}
+TODO
+
+\subsection*{Q29.}
+TODO
+
+\subsection*{Q30.}
+TODO
+
+\end{document}
