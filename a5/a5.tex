@@ -19,9 +19,10 @@
 \usepackage{listings}
 \usepackage{graphicx}
 \usepackage{parskip}
-
+\usepackage{enumitem}
+\setlist{itemsep=-5pt,topsep=-5pt}
 \pgfplotsset{compat=1.18} 
-
+ 
 \begin{document}
 \flushleft
 \renewcommand{\labelitemiii}{\(\smallblackcircle\)}
@@ -36,13 +37,15 @@
 
 \subsection*{Q1.}
 
-R is the set of decidable languages.
+\begin{itemize}
+  \item R is the set of decidable languages.
 
-P is the set of languages that are decidable in polynomial time.
+  \item P is the set of languages that are decidable in polynomial time.
 
-RE is the set of verifiable languages.
+  \item RE is the set of verifiable languages.
 
-NP is the set of languages that are verifiable in polynomial time.
+  \item NP is the set of languages that are verifiable in polynomial time.
+\end{itemize}
 
 \subsection*{Q2.}
 
@@ -79,9 +82,8 @@ QUAD:
 
 \subsection*{Q3.}
 
-Not in NP because the witness (i.e. $y_i$'s) is not polysized relative to
-the input $x$.
-
+Not in NP because the witness (i.e. $y_i$'s) is not polysized
+relative to the input $x$.
 Depending on the chosen $f$, witness could be anything.
 
 \subsection*{Q4.}
@@ -105,18 +107,24 @@ WIP
 
 \subsection*{Q5.}
 
-NP is the set of languages that can be verified in polynomial time (deterministic).
+{\setlength{\parskip}{0pt}
+  NP is the set of languages that can be verified in polynomial time (deterministic).
 
-RE is the set of verifiable languages.
+  RE is the set of verifiable languages.
 
-$\Rightarrow NP \subseteq RE$
+  $\Rightarrow NP \subseteq RE$
+}
 
-NP is the set of languages that can be decided in polynomial time by a
-non-deterministic machine.
 
-R is the set of decidable languages.
+{\setlength{\parskip}{0pt}
+  NP is the set of languages that can be decided in polynomial time by a
+  non-deterministic machine.
 
-$\Rightarrow NP \subseteq R$
+  R is the set of decidable languages.
+
+  $\Rightarrow NP \subseteq R$
+}
+
 
 \subsection*{Q6.}
 
@@ -144,78 +152,211 @@ TODO
 \subsection*{Q8.}
 
 \begin{enumerate}
-  \item no have to prove for every 
+  \item no have to prove for every
   \item yes
-  \item yes 
-  \item no
+  \item yes
+  \item no that doesnt make sense
 \end{enumerate}
 
 For $\ne$, prove 3. For $=$, prove 2.
 
 \subsection*{Q9.}
-TODO
+
+Same as proof done in class except need to prove every witness
+relation for L is polytime verifiable.
+
+See proof for search-to-decision.
+
+Notes:
+\begin{itemize}
+  \item A language L can have multiple witness relations
+  \item A witness relation is a set of $(x,w)$ pairs
+  \item An $x$ might have multiple witnesses but the witness relation only needs to contain one of them for each $x \in L$
+\end{itemize}
 
 \subsection*{Q10.}
-TODO
+
+Pick something that's not in NP.
+
+Busy-beaver:
+$R = \{ (\langle M \rangle, n) : n \text{ is the max number of steps that M runs for on input } \langle M\rangle \}$
+
+This is not verifiable so $P = NP$ doesn't matter.
 
 \subsection*{Q11.}
-TODO
+
+$R = \{ (L,x) : L \text{ is a list of 3-constraints satisfied by } x \} $
+
+This is polytime verifiable.
 
 \subsection*{Q12.}
+
+$U = \{ \langle M \rangle , x : M(x) = 1 \}$
+
 TODO
 
 \subsection*{Q13.}
-TODO
+
+Not necessarily.
+
+Notes:
+\begin{itemize}
+  \item HALT is not in NP but is NP-hard.
+  \item Reduce 3CSP to HALT.
+        \begin{itemize}
+          \item Given a list of 3-constraints L.
+          \item Construct a machine M that iterates over all possible assignments.
+                If one of them satisfies L, then accept.
+                Otherwise, loop forever.
+          \item Can define $\langle M \rangle$ in polynomial time (with respect to the description length of L).
+          \item $L \in \text{3CSP} \iff \langle M \rangle \in \text{HALT}$
+        \end{itemize}
+\end{itemize}
 
 \subsection*{Q14.}
-TODO
+
+No because every problem in NP can be reduced to an NP-complete one.
+Would have to show a reduction of L' to L and that L is in NP.
 
 \subsection*{Q15.}
-TODO
+
+True? Do something like the CircuitSAT proof. Create a circuit
+representing the computation of the TM deciding an arbitrary
+problem in P.
 
 \subsection*{Q16.}
-TODO
+
+P = NP.
+
+If CircuitSAT can be reduced to a problem in P in polynomial time,
+then every problem in NP can be reduced to a problem in P in polynomial time.
 
 \subsection*{Q17.}
-TODO
+
+It goes both ways.
 
 \subsection*{Q18.}
-TODO
+
+Notes:
+\begin{itemize}
+  \item Obviously in NP
+  \item Reduce 3SAT to 4CSP
+  \item Given a 3CNF C of $m$ clauses over $x_1,...,x_n$
+  \item Construct a list L of 4-constraints
+        \begin{itemize}
+          \item For each clause $C_i = l_i \vee l_j \vee l_k$, introduce a new
+                variable x and define 2 constraints
+                $l_i \vee l_j \vee l_k \vee x = 1$ and $l_i \vee l_j \vee l_k \vee \neg x = 1$.
+                The resulting L will consist of variables: $x, x_1,...,x_n$ and have $2m$ constraints.
+          \item If C is satisfiable, then for every clause, both corresponding
+                constraints are true, because at least one of $l_i, l_j, l_k$ is true since $x$
+                and $\neg x$ can't be true at the same time. Therefore, L is satisfiable.
+          \item If C is unsatisfiable, there there is some clause where $l_i, l_j, l_k$
+                are all false. Consider the corresponding constraints in L, i.e.
+                $l_i \vee l_j \vee l_k \vee x = 1$ and $l_i \vee l_j \vee l_k \vee \neg x = 1$
+                Since $l_i = l_j = l_k = 0$, if $x=1$ then the second constraint is false,
+                if $x=0$ then the first constraint is false. Either way, one of the constraints
+                is violated. Therefore, L is unsatisfiable.
+        \end{itemize}
+\end{itemize}
 
 \subsection*{Q19.}
-TODO
+
+No. If he did then he proved P=NP which is highly unlikely.
 
 \subsection*{Q20.}
-TODO
+
+Exponential is fast enough.
 
 \subsection*{Q21.}
 TODO
 
 \subsection*{Q22.}
-TODO
+
+Notes:
+\begin{itemize}
+  \item Clearly in NP: $V(<C>,x\#y) = 1 \iff C(x) = 1$ and $C(y) = 1$
+  \item NP-hard: introduce a dummy variable that doesn't affect the final output
+\end{itemize}
+
+WIP
 
 \subsection*{Q23.}
-TODO
+
+Notes:
+\begin{itemize}
+  \item Clearly in NP: $V(<C>,x) = 1 \iff C(x) = 1$
+  \item NP-hard: Reduce CircuitSAT to Circuit$_{\text{NAND}}$SAT.
+        \begin{itemize}
+          \item Replace (a AND b) with NOT (a NAND b)
+          \item Replace (a OR b) with (a NAND a) NAND (b NAND b)
+          \item NOT gates stay the same (or replace (NOT a) with (a NAND a) for fun)
+        \end{itemize}
+\end{itemize}
+
+WIP
 
 \subsection*{Q24.}
-TODO
+
+Notes:
+\begin{itemize}
+  \item The circuit $C_x$ takes input $w \in \{0,1\}^{T}$ where $T=T(n)$.
+  \item There are $O(T)$ config layers, one for each step of the computation done by $V(x,w)$
+  \item There are a constant number of auxiliary layers between each config
+        layer so there are $O(T)$ auxiliary layers
+  \item Each config layer had $O(T)$ blocks -- one for each cell on the tape at that config step
+  \item Each block has a constant number of nodes so each layer has $O(T)$ nodes.
+  \item $O(T)$ layers with $O(T)$ nodes $\implies$ size of the circuit is $O(T^2)$
+\end{itemize}
+
+WIP
 
 \subsection*{Q25.}
-TODO
+
+Notes:
+\begin{itemize}
+  \item At each configuration layer, only need a constant number of blocks (1?)
+        since the location of the head is always known (walks right then left).
+        Anywhere that the head is not stays the same, can connect to the gates below.
+  \item Since walking right then left, there are around $2T$ steps which is $O(T)$.
+  \item Each layer has a constant number of blocks with a constant number of nodes.
+  \item $\implies$ size is $O(T)$
+\end{itemize}
+
+WIP
 
 \subsection*{Q26.}
-TODO
+
+All verifiers where the movement of the head is already known.
 
 \subsection*{Q27.}
 TODO
 
 \subsection*{Q28.}
-TODO
+
+Notes:
+\begin{itemize}
+  \item Clearly in NP: $V(L,x) = 1 \iff $ x is a satisfying assignment for $L$
+  \item Show it's NP-hard: WIP
+\end{itemize}
 
 \subsection*{Q29.}
-TODO
+Notes:
+\begin{itemize}
+  \item Clearly in NP: $V( ((S_1,...,S_m), k ), (C_1,...,C_k)) = 1 \iff \cup_{i\in [m]} S_i = \cup_{i\in[k]} C_k$
+        \begin{itemize}
+          \item For each element in each set $S_i$, check if it's in any of the $C_i$'s
+          \item For each element in each set $C_i$, check if it's in any of the $S_i$'s
+          \item This can be done in polynomial time with respect to the number of elements (good enough)
+        \end{itemize}
+  \item Show it's NP-hard: WIP
+\end{itemize}
 
 \subsection*{Q30.}
-TODO
+Notes:
+\begin{itemize}
+  \item Clearly in NP: $V(L,x) = 1 \iff $ x is a satisfying assignment for $L$ where $L$ is a list of 1-in-3 constraints
+  \item Show it's NP-hard: WIP
+\end{itemize}
 
 \end{document}
