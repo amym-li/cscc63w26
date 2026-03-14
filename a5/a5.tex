@@ -343,20 +343,75 @@ Notes:
 \subsection*{Q29.}
 Notes:
 \begin{itemize}
-  \item Clearly in NP: $V( ((S_1,...,S_m), k ), (C_1,...,C_k)) = 1 \iff \cup_{i\in [m]} S_i = \cup_{i\in[k]} C_k$
+  \item Clearly in NP: $V( ((S_1,...,S_m), k ), (S_{i1},...,S_{ik})) = 1 \iff \cup_{i\in [m]} S_i = \cup_{i\in[k]} S_{i_k}$
         \begin{itemize}
-          \item For each element in each set $S_i$, check if it's in any of the $C_i$'s
-          \item For each element in each set $C_i$, check if it's in any of the $S_i$'s
+          \item For each element in the initial sets, check if it's contained in the set cover.
+          \item For each element in the given set cover, check if it's contained in the original sets.
           \item This can be done in polynomial time with respect to the number of elements (good enough)
         \end{itemize}
-  \item Show it's NP-hard: WIP
+  \item Show it's NP-hard: Reduce 3SAT to SetCover
+        \begin{itemize}
+          \item Given a 3CNF L with variables $x_1, ...,x_n$ and clauses $C_1, ...,C_m$
+          \item The elements for the sets are: $x_1,...,x_n, C_1, ..., C_m$
+          \item For each variable $x_i$, create 2 sets:
+                \begin{itemize}
+                  \item $S_{i_1}$ containing: the element $x_i$ and the clauses containing the literal $x_i$
+                  \item $S_{i_0}$ containing: the element $x_i$ and the clauses containing the literal $\neg x_i$
+                \end{itemize}
+          \item Suppose L is satisfied by some x.
+                \begin{itemize}
+                  \item Then, for each variable assignment, select the
+                        corresponding set to the variable value.
+                        If $x_i = 1$ in the assignment then select
+                        $S_i=S_{i_1}$, otherwise $S_i=S_{i_0}$
+                        $\Rightarrow k=n$  sets are selected.
+                  \item This collection covers all $x_i$ elements.
+                  \item Consider each clause  $C_i = l_1 \vee l_2 \vee l_3$. At least
+                        one literal evaluates to 1, so $C_i$ is contained within
+                        the corresponding $S_i$. This is true for all clauses
+                        so all clause elements are contained in the selected sets.
+                \end{itemize}
+
+          \item Suppose L is unsatisfiable.
+                \begin{itemize}
+                  \item Choose k=n sets, have to choose one of the pair of sets
+                        for each variable $x_i$ or else the variables won't be covered.
+                  \item Since L is unsatisfiable, there is always at least 1 clause that
+                        evaluates to 0 for every possible assignment. So in the selection
+                        of k=n sets, there is always at least 1 clause that is not covered
+                        because the assignment doesn't satisfy the clause.
+                \end{itemize}
+        \end{itemize}
 \end{itemize}
 
 \subsection*{Q30.}
 Notes:
 \begin{itemize}
   \item Clearly in NP: $V(L,x) = 1 \iff $ x is a satisfying assignment for $L$ where $L$ is a list of 1-in-3 constraints
-  \item Show it's NP-hard: WIP
+  \item Show it's NP-hard: Reduce 3SAT to 1-in-3SAT.
+        \begin{itemize}
+          \item Given a 3CNF L over variables $x_1,...,x_n$ and clauses $C_1,...,C_m$
+          \item For each clause $l_1 \vee l_2 \vee l_3$, create 3 1-in-3 constraints:
+                \begin{itemize}
+                  \item ExactlyOne$(\neg l_1, a, b)$
+                  \item ExactlyOne$(b, l_2, c)$
+                  \item ExactlyOne$(c, d, \neg l_3)$
+                \end{itemize}
+          \item If L satisfiable, when at least one of $l_1, l_2, l_3$ in every clause
+                evaluates to 1. Can always pick $a,b,c$ so that it accepts.
+                \begin{itemize}
+                  \item If only $l_1 = 1$ ...
+                  \item WIP
+                \end{itemize}
+          \item If L unsatisfiable, then there is some clause where $l_1, l_2, l_3$
+                are all false. But then:
+                \begin{itemize}
+                  \item ExactlyOne$(\neg l_1, a, b) \implies a = b = 0$
+                  \item ExactlyOne$(b, l_2, c) \implies c = 1$
+                  \item ExactlyOne$(c, d, \neg l_3) \implies c = \neg l_3 = 1$
+                \end{itemize}
+                This is a constradiction so this 1-in-3SAT instance is unsatisfiable.
+        \end{itemize}
 \end{itemize}
 
 \end{document}
